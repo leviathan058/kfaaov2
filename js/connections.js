@@ -1,8 +1,8 @@
 const GROUPS = [
-  { category: 'Streets at Brown',  words: ['LLOYD','MEETING','BUTLER','POWER'],               color: '#538d4e' },
-  { category: 'Cities in the Bay', words: ['HAYWARD','FREMONT','SUNNYVALE','SAN LEANDRO'],    color: '#b59f3b' },
-  { category: 'Words before Ball', words: ['PICKLE','ODD','PAINT','SNOW'],                    color: '#4a90d9' },
-  { category: 'Shades of Brown',   words: ['CHOCOLATE','OCHRE','SEPIA','BISTRE'],             color: '#9b59b6' }
+  { category: 'Streets at Brown',  words: ['LLOYD','MEETING','BUTLER','POWER'],            color: '#538d4e' },
+  { category: 'Cities in the Bay', words: ['HAYWARD','FREMONT','SUNNYVALE','SAN LEANDRO'], color: '#b59f3b' },
+  { category: 'Words before Ball', words: ['PICKLE','ODD','PAINT','SNOW'],                 color: '#4a90d9' },
+  { category: 'Shades of Brown',   words: ['CHOCOLATE','OCHRE','SEPIA','BISTRE'],          color: '#9b59b6' }
 ];
 
 let mistakes = 0;
@@ -25,8 +25,8 @@ function renderGrid() {
   allWords.forEach(word => {
     const card = document.createElement('button');
     card.classList.add('conn-card');
-    card.textContent = word;
     if (selected.includes(word)) card.classList.add('conn-selected');
+    card.textContent = word;
     card.addEventListener('click', () => toggleSelect(word));
     grid.appendChild(card);
   });
@@ -55,13 +55,9 @@ function toggleSelect(word) {
 }
 
 function submitGuess() {
-  const match = GROUPS.find(g =>
-    selected.every(w => g.words.includes(w))
-  );
+  const match = GROUPS.find(g => selected.every(w => g.words.includes(w)));
 
   if (match) {
-    solvedGroups++;
-
     const solvedEl = document.createElement('div');
     solvedEl.classList.add('solved-group');
     solvedEl.style.background = match.color;
@@ -70,34 +66,31 @@ function submitGuess() {
 
     allWords = allWords.filter(w => !selected.includes(w));
     selected = [];
+    solvedGroups++;
     renderGrid();
 
     if (solvedGroups === GROUPS.length) {
-      document.getElementById('grid').style.display = 'none';
-      document.getElementById('controls').style.display = 'none';
-      document.getElementById('mistakes-wrap').style.display = 'none';
+      ['grid','controls','mistakes-wrap'].forEach(id => document.getElementById(id).style.display = 'none');
       showModal();
     }
   } else {
-    const cards = document.querySelectorAll('.conn-selected');
-    cards.forEach(card => {
+    document.querySelectorAll('.conn-selected').forEach(card => {
       card.classList.remove('conn-shake');
       void card.offsetWidth;
       card.classList.add('conn-shake');
       card.addEventListener('animationend', () => card.classList.remove('conn-shake'), { once: true });
     });
-
     mistakes++;
     renderDots();
     selected = [];
-    setTimeout(() => renderGrid(), 460);
+    setTimeout(renderGrid, 460);
   }
+}
+
+function showModal() {
+  document.getElementById('modal-overlay').classList.add('active');
 }
 
 shuffleArr(allWords);
 renderGrid();
 renderDots();
-
-function showModal() {
-  document.getElementById('modal-overlay').classList.add('active');
-}

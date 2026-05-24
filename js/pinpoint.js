@@ -43,13 +43,13 @@ function submitPin() {
   }
 }
 
+function showModal() {
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
 document.getElementById('pin-guess').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitPin();
 });
 
 buildCard();
 render();
-
-function showModal() {
-  document.getElementById('modal-overlay').classList.add('active');
-}

@@ -48,16 +48,16 @@ function selectAnswer(optionText, btn) {
   const q = QUESTIONS[current];
   const isCorrect = optionText.toUpperCase() === q.answer;
 
-  for (const b of document.querySelectorAll('.trivia-opt')) {
-    if (b.textContent.toUpperCase() === q.answer) { b.classList.add('trivia-correct'); break; }
-  }
+  document.querySelectorAll('.trivia-opt').forEach(b => {
+    if (b.textContent.toUpperCase() === q.answer) b.classList.add('trivia-correct');
+  });
 
-  if (!isCorrect) {
-    btn.classList.add('trivia-wrong');
-    document.getElementById('trivia-message').textContent = 'Wrong!';
-  } else {
+  if (isCorrect) {
     score++;
     document.getElementById('trivia-message').textContent = 'Correct!';
+  } else {
+    btn.classList.add('trivia-wrong');
+    document.getElementById('trivia-message').textContent = 'Wrong!';
   }
 
   setTimeout(() => {
@@ -75,8 +75,8 @@ function showResult() {
   if (score === QUESTIONS.length) showModal();
 }
 
-renderQuestion();
-
 function showModal() {
   document.getElementById('modal-overlay').classList.add('active');
 }
+
+renderQuestion();

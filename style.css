@@ -18,21 +18,6 @@ body {
   min-height: 100vh;
 }
 
-.home-wrap {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
-}
-
-.home-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
 .final-area {
   display: flex;
   gap: 10px;
@@ -109,7 +94,6 @@ main input[type="text"]::placeholder { color: var(--text); }
   margin-bottom: 2rem;
   transition: color 0.15s;
 }
-.back-btn:hover { color: var(--text); }
 
 /*  Wordle  */
 #board {
@@ -126,7 +110,6 @@ main input[type="text"]::placeholder { color: var(--text); }
   width: 58px;
   height: 58px;
   border: 2px solid var(--border);
-  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -241,16 +224,11 @@ main input[type="text"]::placeholder { color: var(--text); }
   margin-bottom: 1rem;
 }
 
-#submit-btn:disabled {
-  opacity: 0.35;
-  cursor: default;
-  pointer-events: none;
-}
+#submit-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 
 #mistakes-wrap {
   text-align: center;
   font-size: 14px;
-  color: var(--text);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -262,17 +240,16 @@ main input[type="text"]::placeholder { color: var(--text); }
 
 @keyframes shake {
   0%,100% { transform: translateX(0); }
-  20%      { transform: translateX(-6px); }
-  40%      { transform: translateX(6px); }
-  60%      { transform: translateX(-4px); }
-  80%      { transform: translateX(4px); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
 }
 .conn-shake { animation: shake 0.45s ease; }
 
 /*  Trivia  */
 #question-num {
   font-size: 12px;
-  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
@@ -308,7 +285,7 @@ main input[type="text"]::placeholder { color: var(--text); }
 .trivia-opt:hover { background: var(--surface-hover); }
 .trivia-correct   { background: #394955 !important; border-color: #e0bdcf !important; color: #e0bdcf !important; }
 .trivia-wrong     { background: #4a1a1a !important; border-color: #e05555 !important; color: #e05555 !important; }
-#trivia-message   { text-align: center; font-size: 14px; min-height: 20px; color: var(--text); }
+#trivia-message   { text-align: center; font-size: 14px; min-height: 20px; }
 
 /*  Pinpoint  */
 #pinpoint-wrap { max-width: 500px; margin: 0 auto; }
@@ -321,7 +298,6 @@ main input[type="text"]::placeholder { color: var(--text); }
 .clue-row {
   padding: 14px 20px;
   text-align: center;
-  transition: background 0.3s;
 }
 
 .clue-row-1 { background: #b3cdf5; }
@@ -388,7 +364,7 @@ main input[type="text"]::placeholder { color: var(--text); }
 
 /*  Wordflower  */
 #wordflower-wrap { max-width: 500px; margin: 0 auto; text-align: center; }
-#wf-score        { font-size: 14px; color: var(--text); margin-bottom: 1.5rem; }
+#wf-score        { font-size: 14px; margin-bottom: 1.5rem; }
 
 .flower-container {
   position: relative;
@@ -451,7 +427,6 @@ main input[type="text"]::placeholder { color: var(--text); }
   font-size: 1.2rem;
   font-weight: bold;
   letter-spacing: 0.1em;
-  color: var(--text);
 }
 
 #wf-found {
@@ -471,14 +446,14 @@ main input[type="text"]::placeholder { color: var(--text); }
   color: var(--accent);
 }
 
-#wf-message { font-size: 14px; color: var(--text); min-height: 20px; }
+#wf-message { font-size: 14px; min-height: 20px; }
 
 /*  Modal  */
 .modal-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0,0,0,0.65);
   z-index: 200;
   align-items: center;
   justify-content: center;
@@ -511,4 +486,4 @@ main input[type="text"]::placeholder { color: var(--text); }
   padding: 8px 24px;
   cursor: pointer;
 }
-.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-close:hover { background: var(--border); }

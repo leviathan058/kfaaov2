@@ -3,7 +3,6 @@ const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
 let currentRow = 0;
-let currentCol = 0;
 let currentGuess = [];
 let gameOver = false;
 
@@ -22,7 +21,7 @@ for (let r = 0; r < MAX_GUESSES; r++) {
 
 const KEYS = [
   ['Q','W','F','P','G','J','L','U','Y'],
-  ['A','R','S','T','D','H','N','E','I', 'O'],
+  ['A','R','S','T','D','H','N','E','I','O'],
   ['ENTER','Z','X','C','V','B','K','M','⌫']
 ];
 
@@ -51,35 +50,33 @@ document.addEventListener('keydown', e => {
 function handleKey(key) {
   if (gameOver) return;
   if (key === '⌫') {
-    if (currentCol > 0) {
-      currentCol--;
+    if (currentGuess.length > 0) {
       currentGuess.pop();
-      document.getElementById(`tile-${currentRow}-${currentCol}`).textContent = '';
-      document.getElementById(`tile-${currentRow}-${currentCol}`).classList.remove('filled');
+      const col = currentGuess.length;
+      const tile = document.getElementById(`tile-${currentRow}-${col}`);
+      tile.textContent = '';
+      tile.classList.remove('filled');
     }
   } else if (key === 'ENTER') {
-    if (currentCol < WORD_LENGTH) { showMessage('Not enough letters'); return; }
+    if (currentGuess.length < WORD_LENGTH) { showMessage('Not enough letters'); return; }
     submitGuess();
   } else {
-    if (currentCol < WORD_LENGTH) {
-      const tile = document.getElementById(`tile-${currentRow}-${currentCol}`);
+    if (currentGuess.length < WORD_LENGTH) {
+      const tile = document.getElementById(`tile-${currentRow}-${currentGuess.length}`);
       tile.textContent = key;
       tile.classList.add('filled');
       currentGuess.push(key);
-      currentCol++;
     }
   }
 }
 
 function submitGuess() {
-  const guess = currentGuess.join('');
-  const isCorrect = guess === ANSWER;
-  const colors = getColors(guess);
+  const isCorrect = currentGuess.join('') === ANSWER;
+  const colors = getColors(currentGuess);
 
   colors.forEach((color, i) => {
     setTimeout(() => {
-      const tile = document.getElementById(`tile-${currentRow}-${i}`);
-      tile.classList.add('flip', color);
+      document.getElementById(`tile-${currentRow}-${i}`).classList.add('flip', color);
       const key = document.getElementById(`key-${currentGuess[i]}`);
       if (key) {
         if (color === 'green') key.classList.add('green');
@@ -95,7 +92,6 @@ function submitGuess() {
       showModal();
     } else {
       currentRow++;
-      currentCol = 0;
       currentGuess = [];
       if (currentRow >= MAX_GUESSES) {
         gameOver = true;
@@ -106,16 +102,15 @@ function submitGuess() {
 }
 
 function getColors(guess) {
-  const answerArr = ANSWER.split('');
+  const answer = ANSWER.split('');
   const result = Array(WORD_LENGTH).fill('gray');
-  const guessArr = guess.split('');
-  guessArr.forEach((l, i) => {
-    if (l === answerArr[i]) { result[i] = 'green'; answerArr[i] = null; }
+  guess.forEach((l, i) => {
+    if (l === answer[i]) { result[i] = 'green'; answer[i] = null; }
   });
-  guessArr.forEach((l, i) => {
+  guess.forEach((l, i) => {
     if (result[i] === 'green') return;
-    const j = answerArr.indexOf(l);
-    if (j !== -1) { result[i] = 'yellow'; answerArr[j] = null; }
+    const j = answer.indexOf(l);
+    if (j !== -1) { result[i] = 'yellow'; answer[j] = null; }
   });
   return result;
 }

@@ -6,13 +6,7 @@
   <title>For Michelle II</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
 
     .home-wrap {
       width: 100vw;
@@ -33,7 +27,6 @@
       object-position: center;
       background: #000;
       z-index: 0;
-      display: block;
     }
 
     .map-area {
@@ -52,21 +45,19 @@
     }
 
     .home-content .final-area input[type="text"] {
-      background: rgba(255, 255, 255, 0.92);
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.92);
+      border: 2px solid rgba(255,255,255,0.9);
       border-radius: 8px;
       color: #1a1a1a;
       font-size: 15px;
       padding: 12px 16px;
     }
 
-    .home-content .final-area input[type="text"]::placeholder {
-      color: #888;
-    }
+    .home-content .final-area input[type="text"]::placeholder { color: #888; }
 
     .home-content .final-area button {
-      background: rgba(255, 255, 255, 0.92);
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.92);
+      border: 2px solid rgba(255,255,255,0.9);
       border-radius: 8px;
       color: #1a1a1a;
       font-size: 15px;
@@ -74,13 +65,10 @@
       padding: 12px 24px;
     }
 
-    .home-content .final-area button:hover {
-      background: #fff;
-    }
+    .home-content .final-area button:hover { background: #fff; }
   </style>
 </head>
 <body>
-
   <img id="bg-map-img" src="File_000.jpeg" alt="">
 
   <a class="map-area" id="area-0" href="wordle.html"></a>
@@ -104,45 +92,37 @@
     const ORIG_H = 6948;
 
     const AREAS = [
-      { type: 'rect',  coords: [8164,5938,9805,6909] },  
-      { type: 'poly',  coords: [2127,5878,2180,6161,2762,6134,2842,5772,2683,5304,2515,5296,2480,5552,2409,5746] }, 
-      { type: 'rect',  coords: [2109,733,2665,27]   },   
-      { type: 'poly',  coords: [4881,414,3742,785,3671,1968,3371,2126,3371,2471,3954,2647,5472,1932,5516,1570,5119,1350,5013,1411,5066,520] }, 
-      { type: 'rect',  coords: [7987,1917,8358,813]  },  
+      { type: 'rect', coords: [8164,5938,9805,6909] },
+      { type: 'poly', coords: [2127,5878,2180,6161,2762,6134,2842,5772,2683,5304,2515,5296,2480,5552,2409,5746] },
+      { type: 'rect', coords: [2109,733,2665,27] },
+      { type: 'poly', coords: [4881,414,3742,785,3671,1968,3371,2126,3371,2471,3954,2647,5472,1932,5516,1570,5119,1350,5013,1411,5066,520] },
+      { type: 'rect', coords: [7987,1917,8358,813] },
     ];
-
-    function getBoundingBox(area) {
-      if (area.type === 'rect') {
-        const [x1,y1,x2,y2] = area.coords;
-        return { x: Math.min(x1,x2), y: Math.min(y1,y2), w: Math.abs(x2-x1), h: Math.abs(y2-y1) };
-      } else {
-        const xs = [], ys = [];
-        for (let i = 0; i < area.coords.length; i += 2) { xs.push(area.coords[i]); ys.push(area.coords[i+1]); }
-        const x = Math.min(...xs), y = Math.min(...ys);
-        return { x, y, w: Math.max(...xs)-x, h: Math.max(...ys)-y };
-      }
-    }
 
     function positionAreas() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-
-      const scaleX = vw / ORIG_W;
-      const scaleY = vh / ORIG_H;
-      const scale  = Math.min(scaleX, scaleY);
-
-      const renderedW = ORIG_W * scale;
-      const renderedH = ORIG_H * scale;
-      const offsetX   = (vw - renderedW) / 2;
-      const offsetY   = (vh - renderedH) / 2;
+      const scale = Math.min(vw / ORIG_W, vh / ORIG_H);
+      const offsetX = (vw - ORIG_W * scale) / 2;
+      const offsetY = (vh - ORIG_H * scale) / 2;
 
       AREAS.forEach((area, i) => {
-        const bb  = getBoundingBox(area);
-        const el  = document.getElementById(`area-${i}`);
-        el.style.left   = (offsetX + bb.x * scale) + 'px';
-        el.style.top    = (offsetY + bb.y * scale) + 'px';
-        el.style.width  = (bb.w * scale) + 'px';
-        el.style.height = (bb.h * scale) + 'px';
+        let x, y, w, h;
+        if (area.type === 'rect') {
+          const [x1,y1,x2,y2] = area.coords;
+          x = Math.min(x1,x2); y = Math.min(y1,y2);
+          w = Math.abs(x2-x1); h = Math.abs(y2-y1);
+        } else {
+          const xs = area.coords.filter((_,i) => i % 2 === 0);
+          const ys = area.coords.filter((_,i) => i % 2 === 1);
+          x = Math.min(...xs); y = Math.min(...ys);
+          w = Math.max(...xs) - x; h = Math.max(...ys) - y;
+        }
+        const el = document.getElementById(`area-${i}`);
+        el.style.left   = (offsetX + x * scale) + 'px';
+        el.style.top    = (offsetY + y * scale) + 'px';
+        el.style.width  = (w * scale) + 'px';
+        el.style.height = (h * scale) + 'px';
       });
     }
 
@@ -162,10 +142,10 @@
         feedback.className = 'feedback wrong';
       }
     }
+
     document.getElementById('final-guess').addEventListener('keydown', e => {
       if (e.key === 'Enter') submitFinal();
     });
-
   </script>
 </body>
 </html>

@@ -16,14 +16,12 @@ function buildFlower() {
   const container = document.getElementById('flower-container');
   container.innerHTML = '';
 
-  
   const centerBtn = document.createElement('button');
   centerBtn.classList.add('petal', 'petal-center');
   centerBtn.textContent = CENTER;
   centerBtn.onclick = () => addLetter(CENTER);
   container.appendChild(centerBtn);
 
-  
   petals.forEach((letter, i) => {
     const btn = document.createElement('button');
     btn.classList.add('petal', `petal-${i}`);
@@ -47,10 +45,10 @@ function submitWord() {
   const word = currentWord.join('');
   const msg = document.getElementById('wf-message');
 
-  if (word.length < 3)              { msg.textContent = 'Too short!';                      clearWord(); return; }
-  if (!word.includes(CENTER))       { msg.textContent = 'Must use the center letter H!';   clearWord(); return; }
-  if (foundWords.includes(word))    { msg.textContent = 'Already found!';                  clearWord(); return; }
-  if (!VALID_WORDS.includes(word))  { msg.textContent = 'Not a valid word.';               clearWord(); return; }
+  if (word.length < 3)             { msg.textContent = 'Too short!';                    clearWord(); return; }
+  if (!word.includes(CENTER))      { msg.textContent = 'Must use the center letter H!'; clearWord(); return; }
+  if (foundWords.includes(word))   { msg.textContent = 'Already found!';                clearWord(); return; }
+  if (!VALID_WORDS.includes(word)) { msg.textContent = 'Not a valid word.';             clearWord(); return; }
 
   foundWords.push(word);
   document.getElementById('wf-count').textContent = foundWords.length;
@@ -62,9 +60,11 @@ function submitWord() {
   document.getElementById('wf-found').appendChild(tag);
   clearWord();
 
-  if (foundWords.length === VALID_WORDS.length) {
-    showModal();
-  }
+  if (foundWords.length === VALID_WORDS.length) showModal();
+}
+
+function showModal() {
+  document.getElementById('modal-overlay').classList.add('active');
 }
 
 document.addEventListener('keydown', e => {
@@ -79,7 +79,3 @@ document.addEventListener('keydown', e => {
 });
 
 buildFlower();
-
-function showModal() {
-  document.getElementById('modal-overlay').classList.add('active');
-}
