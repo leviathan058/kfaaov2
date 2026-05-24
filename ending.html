@@ -31,7 +31,6 @@
       width: 100vw;
       height: 100vh;
       padding-bottom: 8vh;
-      gap: 0;
       position: relative;
     }
 
@@ -42,7 +41,6 @@
       justify-content: center;
       width: 280px;
       height: 100vh;
-      position: relative;
       animation: charEntrance 0.8s cubic-bezier(0.22,1,0.36,1) both;
     }
 
@@ -87,7 +85,6 @@
       border-radius: 20px 20px 20px 4px;
       padding: 1.6rem 1.8rem;
       position: relative;
-      box-shadow: none;
       min-height: 140px;
       display: flex;
       align-items: center;
@@ -171,33 +168,10 @@
       display: flex; align-items: center; justify-content: center;
       transition: background 0.15s, color 0.15s;
       padding: 0;
-      backdrop-filter: none;
     }
 
     .nav-btn:hover { background: #2a3740; color: #fff; }
     .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
-
-    .pause-btn {
-      background: rgba(224,189,207,0.15);
-      border-color: rgba(224,189,207,0.3);
-      color: var(--accent);
-      border-radius: 20px;
-      width: auto;
-      padding: 0 16px;
-      font-size: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
-
-    .pause-btn:hover { background: rgba(224,189,207,0.25); color: #fff; }
-
-    .slide-counter {
-      font-size: 12px;
-      color: rgba(255,255,255,0.3);
-      margin-left: 4px;
-      font-family: 'Nunito', sans-serif;
-    }
 
     .timer-bar-wrap {
       width: 100%;
@@ -243,30 +217,28 @@
 
   <script>
     const PARAGRAPHS = [
-      "Congrats on solving this little puzzle! Happy birthday Michelle!! And today’s also one month since you asked if I liked you :)",
-      "I wish I could’ve given you something in person but I hope you liked what I made. I tried to draw Prospect Terrace, it took me sooo long and I don’t even know how to draw but I tried my best",
-      "I had the idea of doing something like this since I made the little card I gave you on the day you left, but I didn’t really know what to do. I feel like I didn’t say everything I wanted to say on the card because it was very last minute",
-      "Lowkey this was pretty last minute too, I'm barely finishing but that’s because I procrastinated on this a lot, and I had more puzzles I wanted to make but I ran out of time :(",
+      "Congrats on solving this little puzzle! Happy birthday Michelle!! And today's also one month since you asked if I liked you :)",
+      "I wish I could've given you something in person but I hope you liked what I made. I tried to draw Prospect Terrace, it took me sooo long and I don't even know how to draw but I tried my best",
+      "I had the idea of doing something like this since I made the little card I gave you on the day you left, but I didn't really know what to do. I feel like I didn't say everything I wanted to say on the card because it was very last minute",
+      "Lowkey this was pretty last minute too, I'm barely finishing but that's because I procrastinated on this a lot, and I had more puzzles I wanted to make but I ran out of time :(",
       "You make me so happy and I always love hanging out with you. I miss you so much and I find myself thinking about you every 2 picoseconds",
-      "I wish I told you that I liked you sooner but I was too scared to tell you :( I’m so happy you decided to ask if I liked you on that day.",
-      "I get a little sad when you hide your face and say you’re not cute/pretty, but I hope you know how amazing you are to me. I love all the memories we've made this past semester and I want to make many, many more with you :)",
-      "You also said you don’t really do anything for your birthday but you said you booked the sushi place, and I hope this makes you happy too!",
-      "Sorry if you think I gatekeep a lot of things and don’t really tell you stuff. Before when you asked me what I was doing and typing a lot I couldn’t tell you cause I was working on this heh. It was pretty funny.",
-      "And when you asked me what I was doing on my iPad I was trying to draw Prospect Terrace but I just lied and showed you some chemistry review stuff. I haven’t studied a lick of anything yet.",
-      "I can’t wait to see you in person again!! Thanks for being an amazing girlfriend. I’m so happy heheheh"
+      "I wish I told you that I liked you sooner but I was too scared to tell you :( I'm so happy you decided to ask if I liked you on that day.",
+      "I get a little sad when you hide your face and say you're not cute/pretty, but I hope you know how amazing you are to me. I love all the memories we've made this past semester and I want to make many, many more with you :)",
+      "You also said you don't really do anything for your birthday but you said you booked the sushi place, and I hope this makes you happy too!",
+      "Sorry if you think I gatekeep a lot of things and don't really tell you stuff. Before when you asked me what I was doing and typing a lot I couldn't tell you cause I was working on this heh. It was pretty funny.",
+      "And when you asked me what I was doing on my iPad I was trying to draw Prospect Terrace but I just lied and showed you some chemistry review stuff. I haven't studied a lick of anything yet.",
+      "I can't wait to see you in person again!! Thanks for being an amazing girlfriend. I'm so happy heheheh"
     ];
     const INTERVAL = 20000;
 
     let current = 0;
-    let paused = false;
     let timer = null;
-    let barTimer = null;
 
-    const textEl    = document.getElementById('bubble-text');
-    const dotsEl    = document.getElementById('progress-dots');
-    const prevBtn   = document.getElementById('prev-btn');
-    const nextBtn   = document.getElementById('next-btn');
-    const timerBar  = document.getElementById('timer-bar');
+    const textEl   = document.getElementById('bubble-text');
+    const dotsEl   = document.getElementById('progress-dots');
+    const prevBtn  = document.getElementById('prev-btn');
+    const nextBtn  = document.getElementById('next-btn');
+    const timerBar = document.getElementById('timer-bar');
 
     PARAGRAPHS.forEach((_, i) => {
       const dot = document.createElement('div');
@@ -276,14 +248,13 @@
     });
 
     function render(idx) {
-      const textNode = textEl;
-      textNode.classList.remove('fade-in');
-      textNode.classList.add('fade-out');
+      textEl.classList.remove('fade-in');
+      textEl.classList.add('fade-out');
 
       setTimeout(() => {
-        textNode.textContent = PARAGRAPHS[idx];
-        textNode.classList.remove('fade-out');
-        textNode.classList.add('fade-in');
+        textEl.textContent = PARAGRAPHS[idx];
+        textEl.classList.remove('fade-out');
+        textEl.classList.add('fade-in');
       }, 420);
 
       document.querySelectorAll('.dot').forEach((d, i) => {
@@ -298,29 +269,18 @@
     function startBar() {
       timerBar.style.transition = 'none';
       timerBar.style.width = '0%';
-      timerBar.offsetWidth;
+      timerBar.offsetWidth; 
       timerBar.style.transition = `width ${INTERVAL}ms linear`;
       timerBar.style.width = '100%';
     }
 
-    function stopBar() {
-      const computed = getComputedStyle(timerBar).width;
-      const total = timerBar.parentElement.offsetWidth;
-      const pct = (parseFloat(computed) / total * 100).toFixed(1);
-      timerBar.style.transition = 'none';
-      timerBar.style.width = pct + '%';
-    }
-
     function scheduleNext() {
       clearTimeout(timer);
-      if (!paused && current < PARAGRAPHS.length - 1) {
-        timer = setTimeout(() => {
-          goTo(current + 1);
-        }, INTERVAL);
+      if (current < PARAGRAPHS.length - 1) {
+        timer = setTimeout(() => goTo(current + 1), INTERVAL);
         startBar();
       } else {
-        stopBar();
-        timerBar.style.width = current === PARAGRAPHS.length - 1 ? '100%' : timerBar.style.width;
+        timerBar.style.width = '100%';
       }
     }
 
@@ -330,7 +290,6 @@
       render(current);
       scheduleNext();
     }
-
 
     render(0);
     scheduleNext();

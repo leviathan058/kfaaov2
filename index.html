@@ -40,7 +40,6 @@
       position: fixed;
       z-index: 10;
       cursor: pointer;
-
     }
 
     .home-content {
@@ -104,7 +103,6 @@
     const ORIG_W = 10000;
     const ORIG_H = 6948;
 
-
     const AREAS = [
       { type: 'rect',  coords: [8164,5938,9805,6909] },  
       { type: 'poly',  coords: [2127,5878,2180,6161,2762,6134,2842,5772,2683,5304,2515,5296,2480,5552,2409,5746] }, 
@@ -118,7 +116,6 @@
         const [x1,y1,x2,y2] = area.coords;
         return { x: Math.min(x1,x2), y: Math.min(y1,y2), w: Math.abs(x2-x1), h: Math.abs(y2-y1) };
       } else {
-
         const xs = [], ys = [];
         for (let i = 0; i < area.coords.length; i += 2) { xs.push(area.coords[i]); ys.push(area.coords[i+1]); }
         const x = Math.min(...xs), y = Math.min(...ys);
@@ -152,20 +149,13 @@
     positionAreas();
     window.addEventListener('resize', positionAreas);
 
+    const FINAL_ANSWER = 'TANJOUBI';
 
-    const FINAL_HASH = '03d6998f7e5dd51dbde30331955bc0a22be28d87dd94894db29d6821927a1427';
-
-    async function sha256(str) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    async function submitFinal() {
+    function submitFinal() {
       const guess = document.getElementById('final-guess').value.trim().toUpperCase();
       const feedback = document.getElementById('feedback');
       if (!guess) return;
-      const guessHash = await sha256(guess);
-      if (guessHash === FINAL_HASH) {
+      if (guess === FINAL_ANSWER) {
         window.location.href = 'ending.html';
       } else {
         feedback.textContent = 'Incorrect :(';
@@ -175,6 +165,7 @@
     document.getElementById('final-guess').addEventListener('keydown', e => {
       if (e.key === 'Enter') submitFinal();
     });
+
   </script>
 </body>
 </html>

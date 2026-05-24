@@ -1,15 +1,7 @@
-// ── EDIT YOUR CONTENT HERE ──────────────────────────────────────
 const CLUES = ['Bananas', 'Steak fries', 'Cilantro rice', 'Chicken tikka masala', 'Smoked salmon cream cheese'];
-const ANSWER_HASH = '884855a5147da4eea530f1b9cb3358bcb723fc8a86c8d7b9ac35ae86e6c0ef74';
-// ───────────────────────────────────────────────────────────────
+const ANSWER = 'RAT';
 
 let revealed = 1;
-let solved = false;
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
 
 function buildCard() {
   const card = document.getElementById('clue-card');
@@ -35,25 +27,19 @@ function render() {
   document.getElementById('pin-counter').textContent = `${revealed} of ${CLUES.length}`;
 }
 
-async function submitPin() {
-  if (solved) return;
-  const guess = document.getElementById('pin-guess').value.trim().toUpperCase();
-  const msg = document.getElementById('pin-message');
+function submitPin() {
+  const input = document.getElementById('pin-guess');
+  const guess = input.value.trim().toUpperCase();
   if (!guess) return;
 
-  if (guess.includes('RAT')) {
-    solved = true;
-    msg.textContent = '';
-    msg.style.color = '#4ecfaa';
+  if (guess.includes(ANSWER)) {
     showModal();
   } else {
-    msg.textContent = '';
-    msg.style.color = '#e05555';
     if (revealed < CLUES.length) {
       revealed++;
       render();
     }
-    document.getElementById('pin-guess').value = '';
+    input.value = '';
   }
 }
 

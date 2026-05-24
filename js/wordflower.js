@@ -1,7 +1,5 @@
 const CENTER = 'H';
 const VALID_WORDS = ['CHILI','CHILL','CLICHE','HEEL','HELL','HELM','HILL','LEECH','CHIME','MICHELLE'];
-const RESULT_CODE = 'YOUR_CODE_HERE';
-
 let petals = ['E','L','M','C','I'];
 let currentWord = [];
 let foundWords = [];

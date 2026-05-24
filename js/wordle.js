@@ -1,4 +1,4 @@
-const ANSWER_HASH = 'd85177ba7f6717d561d5655579884b60a87da98ce0a170d06804d27d9a554d1a';
+const ANSWER = 'BRICK';
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
@@ -6,15 +6,6 @@ let currentRow = 0;
 let currentCol = 0;
 let currentGuess = [];
 let gameOver = false;
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-function getRuntimeAnswer() {
-  return [66,82,73,67,75].map(c => String.fromCharCode(c));
-}
 
 const board = document.getElementById('board');
 for (let r = 0; r < MAX_GUESSES; r++) {
@@ -80,10 +71,9 @@ function handleKey(key) {
   }
 }
 
-async function submitGuess() {
+function submitGuess() {
   const guess = currentGuess.join('');
-  const guessHash = await sha256(guess);
-  const isCorrect = guessHash === ANSWER_HASH;
+  const isCorrect = guess === ANSWER;
   const colors = getColors(guess);
 
   colors.forEach((color, i) => {
@@ -102,7 +92,6 @@ async function submitGuess() {
   setTimeout(() => {
     if (isCorrect) {
       gameOver = true;
-      showMessage('');
       showModal();
     } else {
       currentRow++;
@@ -117,7 +106,7 @@ async function submitGuess() {
 }
 
 function getColors(guess) {
-  const answerArr = getRuntimeAnswer();
+  const answerArr = ANSWER.split('');
   const result = Array(WORD_LENGTH).fill('gray');
   const guessArr = guess.split('');
   guessArr.forEach((l, i) => {
