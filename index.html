@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Michelle II</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .home-wrap {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 60px;
+    }
+
+    #bg-map-img {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      object-position: center;
+      background: #000;
+      z-index: 0;
+      display: block;
+    }
+
+    .map-area {
+      position: fixed;
+      z-index: 10;
+      cursor: pointer;
+
+    }
+
+    .home-content {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .home-content .final-area input[type="text"] {
+      background: rgba(255, 255, 255, 0.92);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      color: #1a1a1a;
+      font-size: 15px;
+      padding: 12px 16px;
+    }
+
+    .home-content .final-area input[type="text"]::placeholder {
+      color: #888;
+    }
+
+    .home-content .final-area button {
+      background: rgba(255, 255, 255, 0.92);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      color: #1a1a1a;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px 24px;
+    }
+
+    .home-content .final-area button:hover {
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <img id="bg-map-img" src="File_000.jpeg" alt="">
+
+  <a class="map-area" id="area-0" href="wordle.html"></a>
+  <a class="map-area" id="area-1" href="connections.html"></a>
+  <a class="map-area" id="area-2" href="trivia.html"></a>
+  <a class="map-area" id="area-3" href="pinpoint.html"></a>
+  <a class="map-area" id="area-4" href="wordflower.html"></a>
+
+  <div class="home-wrap">
+    <div class="home-content">
+      <div class="final-area">
+        <input type="text" id="final-guess" autocomplete="off">
+        <button onclick="submitFinal()">Submit</button>
+      </div>
+      <p id="feedback" class="feedback"></p>
+    </div>
+  </div>
+
+  <script>
+    const ORIG_W = 10000;
+    const ORIG_H = 6948;
+
+
+    const AREAS = [
+      { type: 'rect',  coords: [8164,5938,9805,6909] },  
+      { type: 'poly',  coords: [2127,5878,2180,6161,2762,6134,2842,5772,2683,5304,2515,5296,2480,5552,2409,5746] }, 
+      { type: 'rect',  coords: [2109,733,2665,27]   },   
+      { type: 'poly',  coords: [4881,414,3742,785,3671,1968,3371,2126,3371,2471,3954,2647,5472,1932,5516,1570,5119,1350,5013,1411,5066,520] }, 
+      { type: 'rect',  coords: [7987,1917,8358,813]  },  
+    ];
+
+    function getBoundingBox(area) {
+      if (area.type === 'rect') {
+        const [x1,y1,x2,y2] = area.coords;
+        return { x: Math.min(x1,x2), y: Math.min(y1,y2), w: Math.abs(x2-x1), h: Math.abs(y2-y1) };
+      } else {
+
+        const xs = [], ys = [];
+        for (let i = 0; i < area.coords.length; i += 2) { xs.push(area.coords[i]); ys.push(area.coords[i+1]); }
+        const x = Math.min(...xs), y = Math.min(...ys);
+        return { x, y, w: Math.max(...xs)-x, h: Math.max(...ys)-y };
+      }
+    }
+
+    function positionAreas() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const scaleX = vw / ORIG_W;
+      const scaleY = vh / ORIG_H;
+      const scale  = Math.min(scaleX, scaleY);
+
+      const renderedW = ORIG_W * scale;
+      const renderedH = ORIG_H * scale;
+      const offsetX   = (vw - renderedW) / 2;
+      const offsetY   = (vh - renderedH) / 2;
+
+      AREAS.forEach((area, i) => {
+        const bb  = getBoundingBox(area);
+        const el  = document.getElementById(`area-${i}`);
+        el.style.left   = (offsetX + bb.x * scale) + 'px';
+        el.style.top    = (offsetY + bb.y * scale) + 'px';
+        el.style.width  = (bb.w * scale) + 'px';
+        el.style.height = (bb.h * scale) + 'px';
+      });
+    }
+
+    positionAreas();
+    window.addEventListener('resize', positionAreas);
+
+
+    const FINAL_HASH = '03d6998f7e5dd51dbde30331955bc0a22be28d87dd94894db29d6821927a1427';
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function submitFinal() {
+      const guess = document.getElementById('final-guess').value.trim().toUpperCase();
+      const feedback = document.getElementById('feedback');
+      if (!guess) return;
+      const guessHash = await sha256(guess);
+      if (guessHash === FINAL_HASH) {
+        window.location.href = 'ending.html';
+      } else {
+        feedback.textContent = 'Incorrect :(';
+        feedback.className = 'feedback wrong';
+      }
+    }
+    document.getElementById('final-guess').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitFinal();
+    });
+  </script>
+</body>
+</html>

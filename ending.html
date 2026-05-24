@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>For Michelle II</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #c2e0f9;
+      --bubble-bg: #fffdf7;
+      --bubble-border: #e8dcc8;
+      --text-dark: #2a1f14;
+      --accent: #e0bdcf;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      overflow: hidden;
+    }
+
+    .scene {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      padding-bottom: 8vh;
+      gap: 0;
+      position: relative;
+    }
+
+    .character-wrap {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 280px;
+      height: 100vh;
+      position: relative;
+      animation: charEntrance 0.8s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    @keyframes charEntrance {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .character-img {
+      width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      object-position: bottom;
+      display: block;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    .dialogue-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 3rem 2rem 1.5rem;
+      max-width: 520px;
+      animation: dialogueEntrance 1s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    @keyframes dialogueEntrance {
+      from { transform: translateX(30px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    .bubble {
+      background: var(--bubble-bg);
+      border: 2px solid var(--bubble-border);
+      border-radius: 20px 20px 20px 4px;
+      padding: 1.6rem 1.8rem;
+      position: relative;
+      box-shadow: none;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .bubble::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      bottom: 28px;
+      border: 10px solid transparent;
+      border-right-color: var(--bubble-border);
+    }
+    .bubble::after {
+      content: '';
+      position: absolute;
+      left: -14px;
+      bottom: 30px;
+      border: 8px solid transparent;
+      border-right-color: var(--bubble-bg);
+    }
+
+    .bubble-text {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-dark);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .bubble-text.fade-out {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    .bubble-text.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+      padding-left: 4px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
+    .dot.visited {
+      background: rgba(224,189,207,0.45);
+    }
+
+    .nav-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 1.2rem;
+      align-items: center;
+    }
+
+    .nav-btn {
+      background: #394955;
+      border: 1px solid #394955;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      color: #e0bdcf;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      padding: 0;
+      backdrop-filter: none;
+    }
+
+    .nav-btn:hover { background: #2a3740; color: #fff; }
+    .nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+    .pause-btn {
+      background: rgba(224,189,207,0.15);
+      border-color: rgba(224,189,207,0.3);
+      color: var(--accent);
+      border-radius: 20px;
+      width: auto;
+      padding: 0 16px;
+      font-size: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .pause-btn:hover { background: rgba(224,189,207,0.25); color: #fff; }
+
+    .slide-counter {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      margin-left: 4px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .timer-bar-wrap {
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width linear;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="character-wrap">
+      <img class="character-img" src="file.png">
+    </div>
+
+    <div class="dialogue-wrap">
+      <div class="bubble">
+        <p class="bubble-text fade-in" id="bubble-text"></p>
+      </div>
+
+      <div class="timer-bar-wrap">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+
+      <div class="progress-dots" id="progress-dots"></div>
+
+      <div class="nav-row">
+        <button class="nav-btn" id="prev-btn" onclick="goTo(current - 1)">&#8592;</button>
+        <button class="nav-btn" id="next-btn" onclick="goTo(current + 1)">&#8594;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PARAGRAPHS = [
+      "Congrats on solving this little puzzle! Happy birthday Michelle!! And today’s also one month since you asked if I liked you :)",
+      "I wish I could’ve given you something in person but I hope you liked what I made. I tried to draw Prospect Terrace, it took me sooo long and I don’t even know how to draw but I tried my best",
+      "I had the idea of doing something like this since I made the little card I gave you on the day you left, but I didn’t really know what to do. I feel like I didn’t say everything I wanted to say on the card because it was very last minute",
+      "Lowkey this was pretty last minute too, I'm barely finishing but that’s because I procrastinated on this a lot, and I had more puzzles I wanted to make but I ran out of time :(",
+      "You make me so happy and I always love hanging out with you. I miss you so much and I find myself thinking about you every 2 picoseconds",
+      "I wish I told you that I liked you sooner but I was too scared to tell you :( I’m so happy you decided to ask if I liked you on that day.",
+      "I get a little sad when you hide your face and say you’re not cute/pretty, but I hope you know how amazing you are to me. I love all the memories we've made this past semester and I want to make many, many more with you :)",
+      "You also said you don’t really do anything for your birthday but you said you booked the sushi place, and I hope this makes you happy too!",
+      "Sorry if you think I gatekeep a lot of things and don’t really tell you stuff. Before when you asked me what I was doing and typing a lot I couldn’t tell you cause I was working on this heh. It was pretty funny.",
+      "And when you asked me what I was doing on my iPad I was trying to draw Prospect Terrace but I just lied and showed you some chemistry review stuff. I haven’t studied a lick of anything yet.",
+      "I can’t wait to see you in person again!! Thanks for being an amazing girlfriend. I’m so happy heheheh"
+    ];
+    const INTERVAL = 7000;
+
+    let current = 0;
+    let paused = false;
+    let timer = null;
+    let barTimer = null;
+
+    const textEl    = document.getElementById('bubble-text');
+    const dotsEl    = document.getElementById('progress-dots');
+    const prevBtn   = document.getElementById('prev-btn');
+    const nextBtn   = document.getElementById('next-btn');
+    const timerBar  = document.getElementById('timer-bar');
+
+    PARAGRAPHS.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      dot.onclick = () => goTo(i);
+      dotsEl.appendChild(dot);
+    });
+
+    function render(idx) {
+      const textNode = textEl;
+      textNode.classList.remove('fade-in');
+      textNode.classList.add('fade-out');
+
+      setTimeout(() => {
+        textNode.textContent = PARAGRAPHS[idx];
+        textNode.classList.remove('fade-out');
+        textNode.classList.add('fade-in');
+      }, 420);
+
+      document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i === idx);
+        d.classList.toggle('visited', i < idx);
+      });
+
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === PARAGRAPHS.length - 1;
+    }
+
+    function startBar() {
+      timerBar.style.transition = 'none';
+      timerBar.style.width = '0%';
+      timerBar.offsetWidth;
+      timerBar.style.transition = `width ${INTERVAL}ms linear`;
+      timerBar.style.width = '100%';
+    }
+
+    function stopBar() {
+      const computed = getComputedStyle(timerBar).width;
+      const total = timerBar.parentElement.offsetWidth;
+      const pct = (parseFloat(computed) / total * 100).toFixed(1);
+      timerBar.style.transition = 'none';
+      timerBar.style.width = pct + '%';
+    }
+
+    function scheduleNext() {
+      clearTimeout(timer);
+      if (!paused && current < PARAGRAPHS.length - 1) {
+        timer = setTimeout(() => {
+          goTo(current + 1);
+        }, INTERVAL);
+        startBar();
+      } else {
+        stopBar();
+        timerBar.style.width = current === PARAGRAPHS.length - 1 ? '100%' : timerBar.style.width;
+      }
+    }
+
+    function goTo(idx) {
+      if (idx < 0 || idx >= PARAGRAPHS.length) return;
+      current = idx;
+      render(current);
+      scheduleNext();
+    }
+
+
+    render(0);
+    scheduleNext();
+  </script>
+</body>
+</html>

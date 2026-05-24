@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Michelle II</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <a href="index.html" class="back-btn">Back</a>
+    <div id="connections-wrap">
+      <div id="solved-groups"></div>
+      <div id="grid"></div>
+      <div id="controls">
+        <button id="shuffle-btn" onclick="shuffle()">Shuffle</button>
+        <button id="submit-btn" onclick="submitGuess()" disabled>Submit</button>
+      </div>
+      <div id="mistakes-wrap">
+        Mistakes remaining: <span id="dots"></span>
+      </div>
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-popup">
+          <p class="modal-msg">good job! 1. [5][0] 2. [6][1]</p>
+          <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('active')">Close</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="js/connections.js"></script>
+</body>
+</html>
